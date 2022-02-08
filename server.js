@@ -85,6 +85,36 @@ app.post("/recipes", (req, res) => {
   }
 });
 
+app.put("/recipes", (req, res) => {
+  let cookbook = {
+    recipes: recipesData.recipes,
+  };
+  const recipeName = req.body.name;
+  const selectedRecipe = recipesData.recipes.find(
+    (recipe) => recipeName === recipe.name
+  );
+
+  if (selectedRecipe) {
+    selectedRecipe.name = recipeName;
+    selectedRecipe.ingredients = req.body.ingredients;
+    selectedRecipe.instructions = req.body.instructions;
+
+    recipesData.recipes.map((recipeInBook) => {
+      if (recipeInBook.name === selectedRecipe.name) {
+        return (recipeInBook = selectedRecipe);
+      }
+    });
+
+    fs.writeFile("./data/data.json", JSON.stringify(), (err) => {
+      if (err) {
+        res.status(500).json({ error: err });
+      }
+    });
+  } else {
+    res.status(404).json({ error: "Recipe does not exist" });
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`Express server running on port: ${PORT}`);
 });
