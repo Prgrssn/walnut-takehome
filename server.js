@@ -51,6 +51,34 @@ app.get("/recipes/:name", (req, res) => {
   }
 });
 
+app.post("/recipes", (req, res) => {
+  let cookbook = {
+    recipes: recipesData.recipes,
+  };
+
+  let recipesAdd = recipesData.recipes;
+
+  const { name, ingredients, instructions } = req.body;
+  const newRecipe = { name, ingredients, instructions };
+
+  recipesAdd.push(newRecipe);
+
+  fs.writeFile("./data/data.json", JSON.stringify(cookbook), (err) => {
+    if (err) {
+      console.log(err);
+      return;
+    } else {
+      console.log("Successfully created new recipe");
+    }
+  });
+
+  if (newRecipe) {
+    res.status(201).json(newRecipe);
+  } else {
+    res.status(500).send("recipe not published");
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`Express server running on port: ${PORT}`);
 });
