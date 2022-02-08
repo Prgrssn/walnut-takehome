@@ -61,21 +61,27 @@ app.post("/recipes", (req, res) => {
   const { name, ingredients, instructions } = req.body;
   const newRecipe = { name, ingredients, instructions };
 
-  recipesAdd.push(newRecipe);
+  const recipeName = recipesAdd.find((i) => i.name === newRecipe.name);
 
-  fs.writeFile("./data/data.json", JSON.stringify(cookbook), (err) => {
-    if (err) {
-      console.log(err);
-      return;
-    } else {
-      console.log("Successfully created new recipe");
-    }
-  });
-
-  if (newRecipe) {
-    res.status(201).json(newRecipe);
+  if (recipeName) {
+    return res.status(400).send("Recipe Already Exists!");
   } else {
-    res.status(500).send("recipe not published");
+    recipesAdd.push(newRecipe);
+
+    fs.writeFile("./data/data.json", JSON.stringify(cookbook), (err) => {
+      if (err) {
+        console.log(err);
+        return;
+      } else {
+        console.log("Successfully created new recipe");
+      }
+    });
+
+    if (newRecipe) {
+      res.status(201).json(newRecipe);
+    } else {
+      res.status(500).send("recipe not published");
+    }
   }
 });
 
