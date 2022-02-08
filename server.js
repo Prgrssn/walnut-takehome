@@ -105,7 +105,7 @@ app.put("/recipes", (req, res) => {
       }
     });
 
-    fs.writeFile("./data/data.json", JSON.stringify(), (err) => {
+    fs.writeFile("./data/data.json", JSON.stringify(cookbook), (err) => {
       if (err) {
         res.status(500).json({ error: err });
       }
