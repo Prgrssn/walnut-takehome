@@ -64,7 +64,7 @@ app.post("/recipes", (req, res) => {
   const recipeName = recipesAdd.find((i) => i.name === newRecipe.name);
 
   if (recipeName) {
-    return res.status(400).send("Recipe Already Exists!");
+    return res.status(400).json({ error: "Recipe already exists" });
   } else {
     recipesAdd.push(newRecipe);
 
