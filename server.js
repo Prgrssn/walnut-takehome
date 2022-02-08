@@ -23,6 +23,19 @@ const getRecipesData = () => {
 
 getRecipesData();
 
+app.get("/cookbook", (_req, res) => {
+  res.json(recipesData);
+});
+
+app.get("/recipes", (_req, res) => {
+  const recipes = recipesData.recipes.map((recipe) => {
+    return {
+      name: recipe.name,
+    };
+  });
+  res.status(200).json(recipes);
+});
+
 app.listen(PORT, () => {
   console.log(`Express server running on port: ${PORT}`);
 });
