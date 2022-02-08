@@ -36,6 +36,21 @@ app.get("/recipes", (_req, res) => {
   res.status(200).json(recipes);
 });
 
+app.get("/recipes/:name", (req, res) => {
+  let recipes = recipesData.recipes;
+  let recipeName = req.params.name;
+
+  const recipe = recipes.find((n) => {
+    return recipeName === n.name;
+  });
+
+  if (recipe) {
+    res.status(200).json(recipe);
+  } else {
+    res.status(404).send("This recipe does not exist");
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`Express server running on port: ${PORT}`);
 });
